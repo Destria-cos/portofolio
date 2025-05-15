@@ -126,87 +126,37 @@ Bagi saya, menjadi seorang developer bukan hanya sekadar menulis kode, tapi juga
 
 
 <!-- Sertifikat Cards -->
-<section class="p-6 bg-white rounded-lg shadow-md mt-6 mx-4">
-  <div class="flex justify-between items-center mb-4">
-    <h2 class="text-xl font-bold text-gray-700">Sertifikat</h2>
-    <button onclick="document.getElementById('modalTambah').classList.remove('hidden')" class="bg-blue-500 text-white px-4 py-2 rounded">+ Tambah</button>
+<div class="max-w-4xl mx-auto px-4">
+  <h3 class="text-2xl font-bold mb-6 text-indigo-500">Sertifikat Saya</h3>
+  
+  <div class="mb-6 text-right">
+    <a href="tambah.php" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow">+ Tambah Sertifikat</a>
   </div>
-  <table class="w-full text-left border border-gray-300">
-    <thead>
-      <tr class="bg-gray-100">
-        <th class="p-2">Judul</th>
-        <th class="p-2">gambar</th>
-        <th class="p-2">Aksi</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php
-      $data = mysqli_query($conn, "SELECT * FROM sertifikat ORDER BY id DESC");
-      while ($d = mysqli_fetch_array($data)) {
-        echo "<tr class='border-t'>";
-        echo "<td class='p-2'>" . htmlspecialchars($d['judul']) . "</td>";
-        echo "<td class='p-2'><a href='" . htmlspecialchars($d['gambar']) . "' target='_blank' class='text-blue-600 underline'>Lihat</a></td>";
-        echo "<td class='p-2 space-x-2'>
-          <button onclick='openEditModal(" . json_encode($d) . ")' class='text-yellow-500'>Edit</button>
-          <button onclick='hapusSertifikat(" . $d['id'] . ")' class='text-red-500'>Hapus</button>
-        </td>";
-        echo "</tr>";
-      }
-      ?>
-    </tbody>
-  </table>
-</section>
 
-<!-- Modal Tambah Sertifikat -->
-<div id="modalTambah" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-  <div class="bg-white p-6 rounded shadow-lg w-96">
-    <h2 class="text-lg font-bold mb-4">Tambah Sertifikat</h2>
-    <form id="formTambah">
-      <input type="text" name="judul" placeholder="Judul" class="w-full border mb-2 p-2" required>
-      <input type="text" name="gambar" placeholder="gambar Sertifikat" class="w-full border mb-2 p-2" required>
-      <input type="hidden" name="aksi" value="tambah_sertifikat">
-      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Simpan</button>
-    </form>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <?php
+      include 'koneksi.php';
+      $result = $conn->query("SELECT * FROM sertifikat ORDER BY id DESC");
+      while ($row = $result->fetch_assoc()):
+    ?>
+    <div class="bg-white rounded-lg shadow p-5 hover:-translate-y-1 hover:shadow-lg transition duration-300 flex flex-col">
+      <?php if (!empty($row['gambar'])): ?>
+        <img src="uploads/<?= $row['gambar'] ?>" alt="Foto sertifikat" class="w-full max-h-[200px] object-cover rounded-md mb-4" />
+      <?php endif; ?>
+
+      <div>
+        <h3 class="text-xl font-semibold text-blue-800"><?= htmlspecialchars($row['judul']) ?></h3>
+        <p class="text-sm text-gray-700 mt-2"><?= nl2br(htmlspecialchars($row['deskripsi'])) ?></p>
+      </div>
+
+      <div class="mt-auto pt-4 flex space-x-3 justify-start">
+        <a href="edit.php?id=<?= $row['id'] ?>" class="bg-yellow-500 hover:bg-yellow-600 text-white text-sm px-4 py-2 rounded">Edit</a>
+        <a href="hapus.php?id=<?= $row['id'] ?>" onclick="return confirm('Yakin ingin menghapus sertifikat ini?')" class="bg-red-500 hover:bg-red-600 text-white text-sm px-4 py-2 rounded">Hapus</a>
+      </div>
+    </div>
+    <?php endwhile; ?>
   </div>
 </div>
-
-<!-- Modal Edit Sertifikat -->
-<div id="modalEdit" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-  <div class="bg-white p-6 rounded shadow-lg w-96">
-    <h2 class="text-lg font-bold mb-4">Edit Sertifikat</h2>
-    <form id="formEdit">
-      <input type="hidden" name="id" id="editId">
-      <input type="text" name="judul" id="editJudul" placeholder="Judul" class="w-full border mb-2 p-2" required>
-      <input type="text" name="gambar" id="editgambar" placeholder="gambar Sertifikat" class="w-full border mb-2 p-2" required>
-      <input type="hidden" name="aksi" value="edit_sertifikat">
-      <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded">Update</button>
-    </form>
-  </div>
-</div>
-
-<?php
-// Handler CRUD Sertifikat
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  if ($_POST['aksi'] === 'tambah_sertifikat') {
-    $judul = $_POST['judul'];
-    $gambar = $_POST['gambar'];
-    mysqli_query($conn, "INSERT INTO sertifikat (judul, gambar) VALUES ('$judul', '$gambar')");
-    exit;
-  }
-  if ($_POST['aksi'] === 'edit_sertifikat') {
-    $id = $_POST['id'];
-    $judul = $_POST['judul'];
-    $gambar = $_POST['gambar'];
-    mysqli_query($conn, "UPDATE sertifikat SET judul='$judul', gambar='$gambar' WHERE id='$id'");
-    exit;
-  }
-  if ($_POST['aksi'] === 'hapus_sertifikat') {
-    $id = $_POST['id'];
-    mysqli_query($conn, "DELETE FROM sertifikat WHERE id='$id'");
-    exit;
-  }
-}
-?>
 
 <!-- Kontak -->
 <section id="contact" class="py-16 bg-white">
@@ -254,34 +204,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     body: formData
   }).then(res => res.text()).then(() => location.reload());
 });
-
-document.getElementById('formEdit').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const formData = new FormData(this);
-  fetch('portofolio.php', {
-    method: 'POST',
-    body: formData
-  }).then(res => res.text()).then(() => location.reload());
-});
-
-function openEditModal(data) {
-  document.getElementById('editId').value = data.id;
-  document.getElementById('editJudul').value = data.judul;
-  document.getElementById('editLink').value = data.link;
-  document.getElementById('modalEdit').classList.remove('hidden');
-}
-
-function hapusSertifikat(id) {
-  if (confirm('Yakin ingin menghapus sertifikat ini?')) {
-    const formData = new FormData();
-    formData.append('id', id);
-    formData.append('aksi', 'hapus_sertifikat');
-    fetch('portofolio.php', {
-      method: 'POST',
-      body: formData
-    }).then(res => res.text()).then(() => location.reload());
-  }
-}
 </script>
 
 </body>
