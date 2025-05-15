@@ -1,5 +1,5 @@
 <?php
-include 'koneksi.php';
+include '../koneksi.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $judul = $_POST['judul'];
@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($_FILES['gambar']['name']) {
         $gambar = time() . '_' . $_FILES['gambar']['name'];
-        move_uploaded_file($_FILES['gambar']['tmp_name'], 'uploads/' . $gambar);
+        move_uploaded_file($_FILES['gambar']['tmp_name'], '../uploads/' . $gambar);
     }
 
     $stmt = $conn->prepare("INSERT INTO sertifikat (judul, deskripsi, gambar) VALUES (?, ?, ?)");

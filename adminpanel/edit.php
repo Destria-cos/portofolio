@@ -1,5 +1,5 @@
 <?php
-include 'koneksi.php';
+include '../koneksi.php';
 $id = $_GET['id'];
 $result = $conn->query("SELECT * FROM sertifikat WHERE id=$id");
 $data = $result->fetch_assoc();
@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($_FILES['gambar']['name']) {
         $gambar = time() . '_' . $_FILES['gambar']['name'];
-        move_uploaded_file($_FILES['gambar']['tmp_name'], 'uploads/' . $gambar);
+        move_uploaded_file($_FILES['gambar']['tmp_name'], '../uploads/' . $gambar);
         $stmt = $conn->prepare("UPDATE sertifikat SET judul=?, deskripsi=?, gambar=? WHERE id=?");
         $stmt->bind_param("sssi", $judul, $deskripsi, $gambar, $id);
     } else {
@@ -254,7 +254,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <label class="block text-sm font-medium text-blue-700 mb-1">Ganti Foto (opsional)</label>
       <input type="file" name="gambar" class="w-full text-blue-700">
       <?php if (!empty($data['gambar'])): ?>
-        <img src="uploads/<?= $data['gambar'] ?>" class="mt-2 rounded-md w-40 shadow-md">
+        <img src="../uploads/<?= $data['gambar'] ?>" class="mt-2 rounded-md w-40 shadow-md">
       <?php endif; ?>
     </div>
 

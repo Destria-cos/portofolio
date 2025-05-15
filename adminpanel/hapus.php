@@ -1,5 +1,5 @@
 <?php
-include 'koneksi.php';
+include '../koneksi.php';
 
 // Validasi ID
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
@@ -14,7 +14,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
     if ($data) {
         // Hapus file gambar dari folder jika ada
-        $gambarPath = "uploads/" . $data['gambar'];
+        $gambarPath = "../uploads/" . $data['gambar'];
         if (!empty($data['gambar']) && file_exists($gambarPath)) {
             unlink($gambarPath);
         }

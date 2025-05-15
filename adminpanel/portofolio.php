@@ -135,13 +135,13 @@ Bagi saya, menjadi seorang developer bukan hanya sekadar menulis kode, tapi juga
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     <?php
-      include 'koneksi.php';
+      include '../koneksi.php';
       $result = $conn->query("SELECT * FROM sertifikat ORDER BY id DESC");
       while ($row = $result->fetch_assoc()):
     ?>
     <div class="bg-white rounded-lg shadow p-5 hover:-translate-y-1 hover:shadow-lg transition duration-300 flex flex-col">
       <?php if (!empty($row['gambar'])): ?>
-        <img src="uploads/<?= $row['gambar'] ?>" alt="Foto sertifikat" class="w-full max-h-[200px] object-cover rounded-md mb-4" />
+        <img src="../uploads/<?= $row['gambar'] ?>" alt="Foto sertifikat" class="w-full max-h-[200px] object-cover rounded-md mb-4" />
       <?php endif; ?>
 
       <div>
