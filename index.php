@@ -8,9 +8,75 @@ include 'koneksi.php';
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portofolio Saya</title>
+  <title>Portofolio Fadillah</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .zoom-controls {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 1000;
+    }
+    .zoom-btn {
+      background: rgba(0,0,0,0.5);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .zoom-btn:hover {
+      background: rgba(0,0,0,0.8);
+    }
+    #imageModal {
+      z-index: 999;
+    }
+    .modal-content {
+      max-height: 90vh;
+      max-width: 90vw;
+      overflow: auto;
+    }
+    body.modal-open {
+      overflow: hidden;
+    }
+    /* Navbar menu styles for mobile */
+    .mobile-menu {
+      transition: transform 0.3s ease-in-out;
+    }
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+    @media (max-width: 767px) {
+      .mobile-menu {
+        transform: translateX(100%);
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 64;
+        background: white;
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+        padding: 1.5rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .mobile-menu {
+        transform: translateX(0) !important; /* Ensure menu is visible */
+        position: static;
+        width: auto;
+        background: transparent;
+        box-shadow: none;
+        padding: 0;
+      }
+    }
+  </style>
 </head>
 <body class="bg-gray-50 font-sans leading-relaxed tracking-wide">
 
@@ -34,19 +100,45 @@ include 'koneksi.php';
   </div>
 </div>
 
+<!-- Modal Image Zoom -->
+<div id="imageModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 hidden">
+  <button onclick="closeImageModal()" class="absolute top-4 right-4 text-white hover:text-red-500 z-50 bg-black bg-opacity-50 rounded-full p-2">
+    <i data-lucide="x" class="w-8 h-8"></i>
+  </button>
+  
+  <div class="modal-content relative">
+    <img id="zoomedImage" src="" alt="Zoomed Certificate" class="max-w-full max-h-full object-contain transition-transform duration-300 origin-center">
+  </div>
+  
+  <div class="zoom-controls">
+    <button onclick="zoomOut()" class="zoom-btn">
+      <i data-lucide="zoom-out" class="w-5 h-5"></i>
+    </button>
+    <button onclick="resetZoom()" class="zoom-btn">
+      <i data-lucide="minimize-2" class="w-5 h-5"></i>
+    </button>
+    <button onclick="zoomIn()" class="zoom-btn">
+      <i data-lucide="zoom-in" class="w-5 h-5"></i>
+    </button>
+  </div>
+</div>
 
 <!-- Navbar -->
-<nav class="bg-white shadow fixed top-0 left-0 w-full z-50 shadow-xl">
+<nav class="bg-white shadow fixed top-0 left-0 w-full z-40 shadow-xl">
   <div class="max-w-6xl mx-auto px-4 py-6 flex justify-between items-center">
-
     <!-- Logo / Nama -->
     <h1 class="text-2xl font-bold text-indigo-500 flex items-center gap-2">
       <i data-lucide="anchor" class="w-6 h-6 text-pink-500"></i>
       Portofolio Fadillah
     </h1>
 
+    <!-- Hamburger Button for Mobile -->
+    <button id="menuToggle" class="md:hidden text-gray-800 hover:text-pink-400 focus:outline-none">
+      <i data-lucide="menu" class="w-6 h-6"></i>
+    </button>
+
     <!-- Menu -->
-    <div class="flex items-center space-x-6">
+    <div id="navMenu" class="mobile-menu hidden md:flex md:flex-row flex-col items-center space-y-4 md:space-y-0 md:space-x-6">
       <a href="#about" class="text-gray-800 hover:text-pink-400 flex items-center gap-1">
         <i data-lucide="user" class="w-5 h-5 text-indigo-500"></i>
         Tentang
@@ -63,7 +155,6 @@ include 'koneksi.php';
         <i data-lucide="mail" class="w-5 h-5 text-indigo-500"></i>
         Kontak
       </a>
-      <!-- Tombol Login -->
       <a href="#login" class="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition flex items-center gap-1">
         <i data-lucide="log-in" class="w-5 h-5 text-white"></i>
         Login
@@ -75,11 +166,11 @@ include 'koneksi.php';
 <!-- Hero Section -->
 <header class="bg-indigo-500 text-white shadow pt-28">
   <div class="max-w-6xl mx-auto px-4 py-10 flex flex-col md:flex-row justify-between items-center gap-4">
-    <!-- Kiri: Teks -->
     <div class="text-center md:text-left">
       <h1 class="text-3xl md:text-4xl font-bold mb-2">Halo, Aku Fadillah Nurwahid 👋</h1>
       <p class="text-lg text-pink-200">Web Developer | Web Creator</p>
     </div>
+  </div>
 </header>
 
 <!-- Tentang -->
@@ -87,13 +178,13 @@ include 'koneksi.php';
   <div class="max-w-4xl mx-auto px-4">
     <h3 class="text-2xl font-bold mb-4 text-indigo-500">Tentang Saya</h3>
     <p class="text-gray-800 text-lg leading-relaxed">
-    Saya adalah Fadillah, seorang pengembang web yang memiliki ketertarikan besar dalam dunia pemrograman, khususnya pada sisi back end dari sebuah website atau aplikasi. Saya menguasai dasar-dasar HTML, CSS, dan JavaScript, serta memiliki sedikit pengalaman dengan framework Tailwind CSS dan React. Dengan kombinasi skill tersebut, saya dapat membangun tampilan dan fungsionalitas dasar sebuah situs web.
-<br><br>
-Meskipun saya memahami dan bisa mengerjakan bagian front end, saya jauh lebih tertarik pada pengembangan back end. Bagi saya, back end lebih menantang dan menyenangkan karena saya bisa fokus membangun sistem, logika, dan struktur data tanpa harus memikirkan desain visual seperti pada front end. Saya merasa lebih nyaman bekerja di balik layar, memastikan bahwa sistem berjalan dengan lancar dan efisien.
-<br><br>
-Saya cukup akrab dengan bahasa PHP, yang sering saya gunakan untuk membangun logika aplikasi dan mengelola komunikasi antara server dan database. Saya menikmati proses membangun API, mengatur alur data, hingga memastikan keamanan sistem yang saya buat.
-<br><br>
-Bagi saya, menjadi seorang developer bukan hanya sekadar menulis kode, tapi juga bagaimana menyelesaikan masalah secara efisien dan memberikan solusi nyata untuk kebutuhan pengguna. Saya percaya bahwa setiap baris kode harus memberikan nilai dan fungsi, serta menjadi bagian dari sistem yang kuat dan dapat diandalkan.
+      Saya adalah Fadillah, seorang pengembang web yang memiliki ketertarikan besar dalam dunia pemrograman, khususnya pada sisi back end dari sebuah website atau aplikasi. Saya menguasai dasar-dasar HTML, CSS, dan JavaScript, serta memiliki sedikit pengalaman dengan framework Tailwind CSS dan React. Dengan kombinasi skill tersebut, saya dapat membangun tampilan dan fungsionalitas dasar sebuah situs web.
+      <br><br>
+      Meskipun saya memahami dan bisa mengerjakan bagian front end, saya jauh lebih tertarik pada pengembangan back end. Bagi saya, back end lebih menantang dan menyenangkan karena saya bisa fokus membangun sistem, logika, dan struktur data tanpa harus memikirkan desain visual seperti pada front end. Saya merasa lebih nyaman bekerja di balik layar, memastikan bahwa sistem berjalan dengan lancar dan efisien.
+      <br><br>
+      Saya cukup akrab dengan bahasa PHP, yang sering saya gunakan untuk membangun logika aplikasi dan mengelola komunikasi antara server dan database. Saya menikmati proses membangun API, mengatur alur data, hingga memastikan keamanan sistem yang saya buat.
+      <br><br>
+      Bagi saya, menjadi seorang developer bukan hanya sekadar menulis kode, tapi juga bagaimana menyelesaikan masalah secara efisien dan memberikan solusi nyata untuk kebutuhan pengguna. Saya percaya bahwa setiap baris kode harus memberikan nilai dan fungsi, serta menjadi bagian dari sistem yang kuat dan dapat diandalkan.
     </p>
   </div>
 </section>
@@ -113,60 +204,124 @@ Bagi saya, menjadi seorang developer bukan hanya sekadar menulis kode, tapi juga
   </div>
 </section>
 
+<!-- Proyek -->
 <section id="projects" class="py-16 bg-gray-100">
-<div class="max-w-4xl mx-auto px-4">
-<h3 class="text-2xl font-bold mb-6 text-indigo-500">Project Saya</h3>
-    <div class="flex justify-center items-center">
-      
-      <!-- Proyek 1 -->
-      <a href="ToDo_list.php" target="_blank" class="block bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition-all duration-300">
+  <div class="max-w-4xl mx-auto px-4">
+    <h3 class="text-2xl font-bold mb-6 text-indigo-500">Project Saya</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <a href="todolist/ToDo_list.php" target="_blank" class="block bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition-all duration-300">
         <h3 class="text-xl font-semibold mb-2">ToDo List App</h3>
         <p class="text-gray-600">Aplikasi pencatat tugas yang dibuat menggunakan HTML, CSS, dan JavaScript.</p>
       </a>
-      
+      <a href="perpustakaan/perpustakaan.php" target="_blank" class="block bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition-all duration-300">
+        <h3 class="text-xl font-semibold mb-2">Perpustakaan Online</h3>
+        <p class="text-gray-600">Aplikasi perpustakaan yang menyimpan list buku, dibuat dengan HTML, CSS, dan JavaScript.</p>
+      </a>
     </div>
   </div>
 </section>
 
 <!-- Sertifikat Cards -->
-<div class="max-w-4xl mx-auto px-4">
-    <h3 class="text-2xl font-bold mb-6 text-indigo-500">Sertifikat Saya</h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <?php
-        include 'koneksi.php';
-        $result = $conn->query("SELECT * FROM sertifikat ORDER BY id DESC");
-        while ($row = $result->fetch_assoc()):
-      ?>
-      <div class="bg-white rounded-lg shadow p-5 hover:-translate-y-1 hover:shadow-lg transition duration-300">
-        <?php if (!empty($row['gambar'])): ?>
-          <img src="uploads/<?= $row['gambar'] ?>" alt="Foto sertifikat" class="w-full max-h-[200px] object-cover rounded-md mb-4" />
-        <?php endif; ?>
-        <h3 class="text-xl font-semibold text-blue-800"><?= htmlspecialchars($row['judul']) ?></h3>
-        <p class="text-sm text-gray-700 mt-2"><?= nl2br(htmlspecialchars($row['deskripsi'])) ?></p>
-      </div>
-      <?php endwhile; ?>
+<div class="max-w-4xl mx-auto px-4 py-16">
+  <h3 class="text-2xl font-bold mb-6 text-indigo-500">Sertifikat Saya</h3>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <?php
+      include 'koneksi.php';
+      $result = $conn->query("SELECT * FROM sertifikat ORDER BY id DESC");
+      while ($row = $result->fetch_assoc()):
+    ?>
+    <div class="bg-white rounded-lg shadow p-5 hover:-translate-y-1 hover:shadow-lg transition duration-300">
+      <?php if (!empty($row['gambar'])): ?>
+        <img src="Uploads/<?= $row['gambar'] ?>" 
+             alt="Foto sertifikat" 
+             class="w-full max-h-[200px] object-cover rounded-md mb-4 cursor-pointer hover:opacity-90 transition"
+             onclick="openImageModal('Uploads/<?= $row['gambar'] ?>')" />
+      <?php endif; ?>
+      <h3 class="text-xl font-semibold text-blue-800"><?= htmlspecialchars($row['judul']) ?></h3>
+      <p class="text-sm text-gray-700 mt-2"><?= nl2br(htmlspecialchars($row['deskripsi'])) ?></p>
     </div>
+    <?php endwhile; ?>
   </div>
-
+</div>
 
 <!-- Kontak -->
 <section id="contact" class="py-16 bg-white">
   <div class="max-w-4xl mx-auto px-4">
     <h3 class="text-2xl font-bold mb-4 text-indigo-500">Hubungi Saya</h3>
-    <p class="text-gray-800 mb-2">📧 Email: <a href="fadilahnurwahid28@email.com" class="text-pink-500 hover:underline">fadilahnurwahid28@email.com</a></p>
-    <p class="text-gray-800">💼 LinkedIn: <a href="https://linkedin.com/in/fadillahnurwahid" target="_blank" class="text-pink-500 hover:underline">linkedin.com/in/destria</a></p>
+    <p class="text-gray-800 mb-2">📧 Email: <a href="mailto:fadilahnurwahid28@email.com" class="text-pink-500 hover:underline">fadilahnurwahid28@email.com</a></p>
+    <p class="text-gray-800">💼 LinkedIn: <a href="https://linkedin.com/in/fadillahnurwahid" target="_blank" class="text-pink-500 hover:underline">linkedin.com/in/fadillahnurwahid</a></p>
   </div>
 </section>
 
 <!-- Footer -->
 <footer class="bg-indigo-500 text-white py-6 mt-10">
   <div class="text-center text-sm">
-    &copy; 2025 Fadillah. All rights reserved.
+    © 2025 Fadillah. All rights reserved.
   </div>
 </footer>
 
-</body>
 <script>
+  // Variabel untuk menyimpan level zoom
+  let currentScale = 1;
+  const zoomStep = 0.2;
+  
+  // Fungsi untuk membuka modal gambar
+  function openImageModal(imageSrc) {
+    const modal = document.getElementById('imageModal');
+    const img = document.getElementById('zoomedImage');
+    
+    img.src = imageSrc;
+    img.style.transform = 'scale(1)';
+    currentScale = 1;
+    
+    modal.classList.remove('hidden');
+    document.body.classList.add('modal-open');
+    
+    document.addEventListener('keydown', handleKeyDown);
+  }
+  
+  // Fungsi untuk menutup modal gambar
+  function closeImageModal() {
+    document.getElementById('imageModal').classList.add('hidden');
+    document.body.classList.remove('modal-open');
+    document.removeEventListener('keydown', handleKeyDown);
+  }
+  
+  // Fungsi untuk handle tombol keyboard
+  function handleKeyDown(e) {
+    if (e.key === 'Escape') {
+      closeImageModal();
+    }
+  }
+  
+  // Fungsi untuk zoom in
+  function zoomIn() {
+    currentScale += zoomStep;
+    document.getElementById('zoomedImage').style.transform = `scale(${currentScale})`;
+  }
+  
+  // Fungsi untuk zoom out
+  function zoomOut() {
+    if (currentScale > zoomStep) {
+      currentScale -= zoomStep;
+      document.getElementById('zoomedImage').style.transform = `scale(${currentScale})`;
+    }
+  }
+  
+  // Fungsi untuk reset zoom
+  function resetZoom() {
+    currentScale = 1;
+    document.getElementById('zoomedImage').style.transform = 'scale(1)';
+  }
+  
+  // Tutup modal saat klik di luar gambar
+  document.getElementById('imageModal').addEventListener('click', function(e) {
+    if (e.target === this || e.target.classList.contains('modal-content')) {
+      closeImageModal();
+    }
+  });
+
+  // Login Modal Functions
   document.getElementById("loginForm").addEventListener("submit", function(e) {
     e.preventDefault();
     const formData = new FormData(this);
@@ -178,13 +333,39 @@ Bagi saya, menjadi seorang developer bukan hanya sekadar menulis kode, tapi juga
     .then(res => res.text())
     .then(res => {
       if (res === "success") {
-        window.location.href = "admin.html"; // Ganti ke file dashboard adminmu
+        window.location.href = "admin.html";
       } else {
         alert("Email atau password salah!");
       }
     });
   });
 
+  // Navbar Toggle Functionality
+  const menuToggle = document.getElementById('menuToggle');
+  const navMenu = document.getElementById('navMenu');
+
+  menuToggle.addEventListener('click', () => {
+    navMenu.classList.toggle('open');
+    navMenu.classList.toggle('hidden');
+  });
+
+  // Close mobile menu when clicking a link
+  navMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navMenu.classList.remove('open');
+      navMenu.classList.add('hidden');
+    });
+  });
+
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+      navMenu.classList.remove('open');
+      navMenu.classList.add('hidden');
+    }
+  });
+
+  // Inisialisasi ikon Lucide
   lucide.createIcons();
 
   const modal = document.getElementById("modalLogin");
@@ -202,5 +383,4 @@ Bagi saya, menjadi seorang developer bukan hanya sekadar menulis kode, tapi juga
     openModal();
   });
 </script>
-
 </html>

@@ -11,6 +11,38 @@ include '../koneksi.php';
   <title>Portofolio Saya</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Navbar menu styles for mobile */
+    .mobile-menu {
+      transition: transform 0.3s ease-in-out;
+    }
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+    @media (max-width: 767px) {
+      .mobile-menu {
+        transform: translateX(100%);
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 64;
+        background: white;
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+        padding: 1.5rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .mobile-menu {
+        transform: translateX(0) !important; /* Ensure menu is visible */
+        position: static;
+        width: auto;
+        background: transparent;
+        box-shadow: none;
+        padding: 0;
+      }
+    }
+  </style>
 </head>
 <body class="bg-gray-50 font-sans leading-relaxed tracking-wide">
 
@@ -33,15 +65,19 @@ include '../koneksi.php';
 <!-- Navbar -->
 <nav class="bg-white shadow fixed top-0 left-0 w-full z-50 shadow-xl">
   <div class="max-w-6xl mx-auto px-4 py-6 flex justify-between items-center">
-
     <!-- Logo / Nama -->
     <h1 class="text-2xl font-bold text-indigo-500 flex items-center gap-2">
       <i data-lucide="anchor" class="w-6 h-6 text-pink-500"></i>
       Portofolio Fadillah
     </h1>
 
+    <!-- Hamburger Button for Mobile -->
+    <button id="menuToggle" class="md:hidden text-gray-800 hover:text-pink-400 focus:outline-none">
+      <i data-lucide="menu" class="w-6 h-6"></i>
+    </button>
+
     <!-- Menu -->
-    <div class="flex items-center space-x-6">
+    <div id="navMenu" class="mobile-menu hidden md:flex md:flex-row flex-col items-center space-y-4 md:space-y-0 md:space-x-6">
       <a href="#about" class="text-gray-800 hover:text-pink-400 flex items-center gap-1">
         <i data-lucide="user" class="w-5 h-5 text-indigo-500"></i>
         Tentang
@@ -74,6 +110,7 @@ include '../koneksi.php';
       <h1 class="text-3xl md:text-4xl font-bold mb-2">Halo, Aku Fadillah Nurwahid 👋</h1>
       <p class="text-lg text-pink-200">Web Developer | Web Creator</p>
     </div>
+  </div>
 </header>
 
 <!-- Tentang -->
@@ -81,13 +118,13 @@ include '../koneksi.php';
   <div class="max-w-4xl mx-auto px-4">
     <h3 class="text-2xl font-bold mb-4 text-indigo-500">Tentang Saya</h3>
     <p class="text-gray-800 text-lg leading-relaxed">
-    Saya adalah Fadillah, seorang pengembang web yang memiliki ketertarikan besar dalam dunia pemrograman, khususnya pada sisi back end dari sebuah website atau aplikasi. Saya menguasai dasar-dasar HTML, CSS, dan JavaScript, serta memiliki sedikit pengalaman dengan framework Tailwind CSS dan React. Dengan kombinasi skill tersebut, saya dapat membangun tampilan dan fungsionalitas dasar sebuah situs web.
-<br><br>
-Meskipun saya memahami dan bisa mengerjakan bagian front end, saya jauh lebih tertarik pada pengembangan back end. Bagi saya, back end lebih menantang dan menyenangkan karena saya bisa fokus membangun sistem, logika, dan struktur data tanpa harus memikirkan desain visual seperti pada front end. Saya merasa lebih nyaman bekerja di balik layar, memastikan bahwa sistem berjalan dengan lancar dan efisien.
-<br><br>
-Saya cukup akrab dengan bahasa PHP, yang sering saya gunakan untuk membangun logika aplikasi dan mengelola komunikasi antara server dan database. Saya menikmati proses membangun API, mengatur alur data, hingga memastikan keamanan sistem yang saya buat.
-<br><br>
-Bagi saya, menjadi seorang developer bukan hanya sekadar menulis kode, tapi juga bagaimana menyelesaikan masalah secara efisien dan memberikan solusi nyata untuk kebutuhan pengguna. Saya percaya bahwa setiap baris kode harus memberikan nilai dan fungsi, serta menjadi bagian dari sistem yang kuat dan dapat diandalkan.
+      Saya adalah Fadillah, seorang pengembang web yang memiliki ketertarikan besar dalam dunia pemrograman, khususnya pada sisi back end dari sebuah website atau aplikasi. Saya menguasai dasar-dasar HTML, CSS, dan JavaScript, serta memiliki sedikit pengalaman dengan framework Tailwind CSS dan React. Dengan kombinasi skill tersebut, saya dapat membangun tampilan dan fungsionalitas dasar sebuah situs web.
+      <br><br>
+      Meskipun saya memahami dan bisa mengerjakan bagian front end, saya jauh lebih tertarik pada pengembangan back end. Bagi saya, back end lebih menantang dan menyenangkan karena saya bisa fokus membangun sistem, logika, dan struktur data tanpa harus memikirkan desain visual seperti pada front end. Saya merasa lebih nyaman bekerja di balik layar, memastikan bahwa sistem berjalan dengan lancar dan efisien.
+      <br><br>
+      Saya cukup akrab dengan bahasa PHP, yang sering saya gunakan untuk membangun logika aplikasi dan mengelola komunikasi antara server dan database. Saya menikmati proses membangun API, mengatur alur data, hingga memastikan keamanan sistem yang saya buat.
+      <br><br>
+      Bagi saya, menjadi seorang developer bukan hanya sekadar menulis kode, tapi juga bagaimana menyelesaikan masalah secara efisien dan memberikan solusi nyata untuk kebutuhan pengguna. Saya percaya bahwa setiap baris kode harus memberikan nilai dan fungsi, serta menjadi bagian dari sistem yang kuat dan dapat diandalkan.
     </p>
   </div>
 </section>
@@ -124,7 +161,6 @@ Bagi saya, menjadi seorang developer bukan hanya sekadar menulis kode, tapi juga
   </div>
 </section>
 
-
 <!-- Sertifikat Cards -->
 <div class="max-w-4xl mx-auto px-4">
   <h3 class="text-2xl font-bold mb-6 text-indigo-500">Sertifikat Saya</h3>
@@ -141,7 +177,7 @@ Bagi saya, menjadi seorang developer bukan hanya sekadar menulis kode, tapi juga
     ?>
     <div class="bg-white rounded-lg shadow p-5 hover:-translate-y-1 hover:shadow-lg transition duration-300 flex flex-col">
       <?php if (!empty($row['gambar'])): ?>
-        <img src="../uploads/<?= $row['gambar'] ?>" alt="Foto sertifikat" class="w-full max-h-[200px] object-cover rounded-md mb-4" />
+        <img src="../Uploads/<?= $row['gambar'] ?>" alt="Foto sertifikat" class="w-full max-h-[200px] object-cover rounded-md mb-4" />
       <?php endif; ?>
 
       <div>
@@ -170,13 +206,14 @@ Bagi saya, menjadi seorang developer bukan hanya sekadar menulis kode, tapi juga
 <!-- Footer -->
 <footer class="bg-indigo-500 text-white py-6 mt-10">
   <div class="text-center text-sm">
-    &copy; 2025 Fadillah. All rights reserved.
+    © 2025 Fadillah. All rights reserved.
   </div>
 </footer>
 
 <script>
   lucide.createIcons();
 
+  // Logout Modal Functions
   const modalLogout = document.getElementById("modalLogout");
 
   function openLogoutModal() {
@@ -188,7 +225,7 @@ Bagi saya, menjadi seorang developer bukan hanya sekadar menulis kode, tapi juga
   }
 
   function confirmLogout() {
-    window.location.href = "index.php";
+    window.location.href = "../index.php";
   }
 
   document.querySelector("a[href='#logout']").addEventListener("click", function(e) {
@@ -196,14 +233,30 @@ Bagi saya, menjadi seorang developer bukan hanya sekadar menulis kode, tapi juga
     openLogoutModal();
   });
 
-  document.getElementById('formTambah').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const formData = new FormData(this);
-  fetch('portofolio.php', {
-    method: 'POST',
-    body: formData
-  }).then(res => res.text()).then(() => location.reload());
-});
+  // Navbar Toggle Functionality
+  const menuToggle = document.getElementById('menuToggle');
+  const navMenu = document.getElementById('navMenu');
+
+  menuToggle.addEventListener('click', () => {
+    navMenu.classList.toggle('open');
+    navMenu.classList.toggle('hidden');
+  });
+
+  // Close mobile menu when clicking a link
+  navMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navMenu.classList.remove('open');
+      navMenu.classList.add('hidden');
+    });
+  });
+
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+      navMenu.classList.remove('open');
+      navMenu.classList.add('hidden');
+    }
+  });
 </script>
 
 </body>
