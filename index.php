@@ -11,7 +11,13 @@ include 'koneksi.php';
   <title>Portofolio Fadillah</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
     .zoom-controls {
       position: fixed;
       bottom: 20px;
@@ -31,6 +37,7 @@ include 'koneksi.php';
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      transition: background 0.3s;
     }
     .zoom-btn:hover {
       background: rgba(0,0,0,0.8);
@@ -68,7 +75,7 @@ include 'koneksi.php';
     }
     @media (min-width: 768px) {
       .mobile-menu {
-        transform: translateX(0) !important; /* Ensure menu is visible */
+        transform: translateX(0);
         position: static;
         width: auto;
         background: transparent;
@@ -76,13 +83,32 @@ include 'koneksi.php';
         padding: 0;
       }
     }
+    /* Section Divider */
+    .section-divider {
+      width: 100%;
+      height: 20px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113.64,31.08,1200,41.09V0H0Z" fill="%23E0E7FF"></path></svg>') no-repeat center center;
+      background-size: cover;
+    }
+    /* Skill Card Hover */
+    .skill-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .skill-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    /* Gradient Background */
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e0e7ff 100%);
+    }
   </style>
 </head>
-<body class="bg-gray-50 font-sans leading-relaxed tracking-wide">
+<body class="font-sans leading-relaxed tracking-wide">
 
 <!-- Modal Login -->
 <div id="modalLogin" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
-  <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 relative">
+  <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 relative" data-aos="zoom-in">
     <button onclick="closeModal()" class="absolute top-2 right-2 text-gray-400 hover:text-red-500">
       <i data-lucide="x" class="w-5 h-5"></i>
     </button>
@@ -95,7 +121,7 @@ include 'koneksi.php';
       <label class="block mb-2 text-sm font-medium text-gray-700">Password</label>
       <input type="password" name="password" class="w-full mb-6 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="••••••••" required>
 
-      <button type="submit" class="w-full bg-pink-500 hover:bg-pink-600 text-white py-2 rounded-lg font-semibold">Login</button>
+      <button type="submit" class="w-full bg-pink-500 hover:bg-pink-600 text-white py-2 rounded-lg font-semibold transition-all duration-300">Login</button>
     </form>
   </div>
 </div>
@@ -138,7 +164,7 @@ include 'koneksi.php';
     </button>
 
     <!-- Menu -->
-    <div id="navMenu" class="mobile-menu hidden md:flex md:flex-row flex-col items-center space-y-4 md:space-y-0 md:space-x-6">
+    <div id="navMenu" class="mobile-menu md:flex md:flex-row flex-col items-center space-y-4 md:space-y-0 md:space-x-6 hidden">
       <a href="#about" class="text-gray-800 hover:text-pink-400 flex items-center gap-1">
         <i data-lucide="user" class="w-5 h-5 text-indigo-500"></i>
         Tentang
@@ -164,7 +190,7 @@ include 'koneksi.php';
 </nav>
 
 <!-- Hero Section -->
-<header class="bg-indigo-500 text-white shadow pt-28">
+<header class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow pt-28" data-aos="fade-up">
   <div class="max-w-6xl mx-auto px-4 py-10 flex flex-col md:flex-row justify-between items-center gap-4">
     <div class="text-center md:text-left">
       <h1 class="text-3xl md:text-4xl font-bold mb-2">Halo, Aku Fadillah Nurwahid 👋</h1>
@@ -173,8 +199,10 @@ include 'koneksi.php';
   </div>
 </header>
 
+<div class="section-divider"></div>
+
 <!-- Tentang -->
-<section id="about" class="py-16 bg-white">
+<section id="about" class="py-16 bg-white" data-aos="fade-up" data-aos-delay="100">
   <div class="max-w-4xl mx-auto px-4">
     <h3 class="text-2xl font-bold mb-4 text-indigo-500">Tentang Saya</h3>
     <p class="text-gray-800 text-lg leading-relaxed">
@@ -189,31 +217,35 @@ include 'koneksi.php';
   </div>
 </section>
 
+<div class="section-divider"></div>
+
 <!-- Keahlian -->
-<section id="skills" class="py-16 bg-gray-100">
+<section id="skills" class="py-16 bg-gray-100" data-aos="fade-up" data-aos-delay="200">
   <div class="max-w-4xl mx-auto px-4">
     <h3 class="text-2xl font-bold mb-6 text-indigo-500">Keahlian Saya</h3>
     <ul class="grid grid-cols-2 md:grid-cols-4 gap-4 text-gray-800">
-      <li class="flex items-center gap-2"><i data-lucide="code"></i> HTML</li>
-      <li class="flex items-center gap-2"><i data-lucide="code"></i> CSS</li>
-      <li class="flex items-center gap-2"><i data-lucide="code"></i> JavaScript</li>
-      <li class="flex items-center gap-2"><i data-lucide="settings"></i> Git & GitHub</li>
-      <li class="flex items-center gap-2"><i data-lucide="server"></i> MySQL</li>
-      <li class="flex items-center gap-2"><i data-lucide="layout"></i> UI/UX Design</li>
+      <li class="skill-card flex items-center gap-2 bg-white p-3 rounded-lg shadow"><i data-lucide="code"></i> HTML</li>
+      <li class="skill-card flex items-center gap-2 bg-white p-3 rounded-lg shadow"><i data-lucide="code"></i> CSS</li>
+      <li class="skill-card flex items-center gap-2 bg-white p-3 rounded-lg shadow"><i data-lucide="code"></i> JavaScript</li>
+      <li class="skill-card flex items-center gap-2 bg-white p-3 rounded-lg shadow"><i data-lucide="settings"></i> Git & GitHub</li>
+      <li class="skill-card flex items-center gap-2 bg-white p-3 rounded-lg shadow"><i data-lucide="server"></i> MySQL</li>
+      <li class="skill-card flex items-center gap-2 bg-white p-3 rounded-lg shadow"><i data-lucide="layout"></i> UI/UX Design</li>
     </ul>
   </div>
 </section>
 
+<div class="section-divider"></div>
+
 <!-- Proyek -->
-<section id="projects" class="py-16 bg-gray-100">
+<section id="projects" class="py-16 bg-gray-100" data-aos="fade-up" data-aos-delay="300">
   <div class="max-w-4xl mx-auto px-4">
     <h3 class="text-2xl font-bold mb-6 text-indigo-500">Project Saya</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <a href="todolist/ToDo_list.php" target="_blank" class="block bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition-all duration-300">
+      <a href="todolist/ToDo_list.php" target="_blank" class="block bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition-all duration-300" data-aos="fade-up" data-aos-delay="400">
         <h3 class="text-xl font-semibold mb-2">ToDo List App</h3>
         <p class="text-gray-600">Aplikasi pencatat tugas yang dibuat menggunakan HTML, CSS, dan JavaScript.</p>
       </a>
-      <a href="perpustakaan/perpustakaan.php" target="_blank" class="block bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition-all duration-300">
+      <a href="perpustakaan/perpustakaan.php" target="_blank" class="block bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition-all duration-300" data-aos="fade-up" data-aos-delay="500">
         <h3 class="text-xl font-semibold mb-2">Perpustakaan Online</h3>
         <p class="text-gray-600">Aplikasi perpustakaan yang menyimpan list buku, dibuat dengan HTML, CSS, dan JavaScript.</p>
       </a>
@@ -221,8 +253,10 @@ include 'koneksi.php';
   </div>
 </section>
 
+<div class="section-divider"></div>
+
 <!-- Sertifikat Cards -->
-<div class="max-w-4xl mx-auto px-4 py-16">
+<div class="max-w-4xl mx-auto px-4 py-16" data-aos="fade-up" data-aos-delay="600">
   <h3 class="text-2xl font-bold mb-6 text-indigo-500">Sertifikat Saya</h3>
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     <?php
@@ -230,7 +264,7 @@ include 'koneksi.php';
       $result = $conn->query("SELECT * FROM sertifikat ORDER BY id DESC");
       while ($row = $result->fetch_assoc()):
     ?>
-    <div class="bg-white rounded-lg shadow p-5 hover:-translate-y-1 hover:shadow-lg transition duration-300">
+    <div class="bg-white rounded-lg shadow p-5 hover:-translate-y-1 hover:shadow-lg transition duration-300" data-aos="fade-up" data-aos-delay="700">
       <?php if (!empty($row['gambar'])): ?>
         <img src="Uploads/<?= $row['gambar'] ?>" 
              alt="Foto sertifikat" 
@@ -244,8 +278,10 @@ include 'koneksi.php';
   </div>
 </div>
 
+<div class="section-divider"></div>
+
 <!-- Kontak -->
-<section id="contact" class="py-16 bg-white">
+<section id="contact" class="py-16 bg-white" data-aos="fade-up" data-aos-delay="800">
   <div class="max-w-4xl mx-auto px-4">
     <h3 class="text-2xl font-bold mb-4 text-indigo-500">Hubungi Saya</h3>
     <p class="text-gray-800 mb-2">📧 Email: <a href="mailto:fadilahnurwahid28@email.com" class="text-pink-500 hover:underline">fadilahnurwahid28@email.com</a></p>
@@ -254,13 +290,19 @@ include 'koneksi.php';
 </section>
 
 <!-- Footer -->
-<footer class="bg-indigo-500 text-white py-6 mt-10">
+<footer class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-6 mt-10">
   <div class="text-center text-sm">
     © 2025 Fadillah. All rights reserved.
   </div>
 </footer>
 
 <script>
+  // Initialize AOS
+  AOS.init({
+    duration: 800,
+    once: true,
+  });
+
   // Variabel untuk menyimpan level zoom
   let currentScale = 1;
   const zoomStep = 0.2;
